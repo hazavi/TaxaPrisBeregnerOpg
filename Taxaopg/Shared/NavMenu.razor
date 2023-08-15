@@ -1,0 +1,47 @@
+﻿<div class="top-row ps-3 navbar navbar-dark">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="">Taxa 4x27</a>
+        <button title="Navigation menu" class="navbar-toggler" @onclick="ToggleNavMenu">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+    </div>
+</div>
+
+<div class="@NavMenuCssClass" @onclick="ToggleNavMenu">
+    <nav class="flex-column">
+
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" href="book">
+                <img src="/images/taxi.png" alt="Logo" class="logo-image" />
+                <span class="oi oi-list-plus" aria-hidden="true"></span> Book Taxa
+            </NavLink>
+        </div> 
+
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" href="taxa-priser">
+                <img src="/images/price2.png" alt="Logo" class="logo-image" />
+                <span class="oi oi-list-plus" aria-hidden="true"></span> Taxa Priser
+            </NavLink>
+        </div> 
+
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" href="https://www.google.com/maps/dir/Your+Location" target="_blank">
+                <img src="/images/tmap.png" alt="Logo" class="logo-image" />
+                <span class="oi oi-list-plus" aria-hidden="true"></span> Google Maps
+            </NavLink>
+        </div>
+
+
+    </nav>
+</div>
+
+@code {
+    private bool collapseNavMenu = true;
+
+    private string? NavMenuCssClass => collapseNavMenu ? "collapse" : null;
+
+    private void ToggleNavMenu()
+    {
+        collapseNavMenu = !collapseNavMenu;
+    }
+}

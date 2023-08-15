@@ -1,0 +1,212 @@
+﻿@page "/book"
+@using System.Globalization
+@using Taxaopg.Services
+
+<h3 class = "title">Taxa Booking</h3>
+
+<div>
+    <label for="taxiType">Vælg taxa:</label>
+    <select id="taxiType" @bind="selectedTaxiType">
+        <option value="Almindelige (Dagtimer)">Almindelige (Dagtimer)</option>
+        <option value="Almindelige (Aften/Nat/Weekend)">Almindelige (Aften/Nat/Weekend)</option>
+        <option value="MiniBus (Dagtimer)">MiniBus (Dagtimer)</option>
+        <option value="MiniBus (Aften/Nat/Weekend)">MiniBus (Aften/Nat/Weekend)</option>
+    </select>
+</div>
+
+@*Display*@
+
+<div class="information-box @(selectedTaxiType == "Almindelige (Dagtimer)" ? "visible" : "hidden")">
+            <table>
+
+              <tr>
+                 <th>Start</th>
+                 <th>Kilometer</th>
+
+              </tr>
+
+              <tr>
+                   <td>37(kr./tur)</td>
+
+                   <td>12,75(kr./km)</td>
+              </tr>
+
+              <tr>
+                <th id="passagerer">1-6 passagerer</th>
+              </tr>
+
+              <tr>
+                <th id="tid">Dagtimer</th>
+              </tr>
+              
+
+               <tr>
+                <td>Mandag-Fredag kl.06-18</td>
+              </tr>
+
+              </table>
+</div>
+<div class="information-box @(selectedTaxiType == "Almindelige (Aften/Nat/Weekend)" ? "visible" : "hidden")">
+    <table>
+
+              <tr>
+                 <th>Start</th>
+                 <th>Kilometer</th>
+
+              </tr>
+
+              <tr>
+                   <td>47(kr./tur)</td>
+
+                   <td>16(kr./km)</td>
+              </tr>
+
+              <tr>
+                <th id="passagerer">1-6 passagerer</th>
+              </tr>
+
+              <tr>
+                <th id="tid">Aften/Nat/Weekend</th>
+              </tr>
+              
+
+               <tr>
+                <td>Mandag-Fredag kl.18-06</td>
+              </tr>
+               <tr>
+               <td>Lørdag-Søndag kl.00-24</td>
+              </tr>
+              </table>
+</div>
+
+<div class="information-box @(selectedTaxiType == "MiniBus (Dagtimer)" ? "visible" : "hidden")">
+   <table>
+
+              <tr>
+                 <th>Start</th>
+                 <th>Kilometer</th>
+
+              </tr>
+
+              <tr>
+                   <td>77(kr./tur)</td>
+
+                   <td>17(kr./km)</td>
+              </tr>
+
+              <tr>
+                <th id="passagerer">7-8 passagerer</th>
+              </tr>
+
+              <tr>
+                <th id="tid">Dagtimer</th>
+              </tr>
+              
+
+               <tr>
+                <td>Mandag-Fredag kl.06-18</td>
+              </tr>
+
+              </table>
+</div>
+<div class="information-box @(selectedTaxiType == "MiniBus (Aften/Nat/Weekend)" ? "visible" : "hidden")">
+     <table>
+
+              <tr>
+                 <th>Start</th>
+                 <th>Kilometer</th>
+
+              </tr>
+
+              <tr>
+                   <td>87(kr./tur)</td>
+
+                   <td>19(kr./km)</td>
+              </tr>
+
+              <tr>
+                <th id="passagerer">7-8 passagerer</th>
+              </tr>
+
+              <tr>
+                <th id="tid">Aften/Nat/Weekend</th>
+              </tr>
+              
+
+               <tr>
+                <td>Mandag-Fredag kl.18-06</td>
+              </tr>
+               <tr>
+               <td>Lørdag-Søndag kl.00-24</td>
+              </tr>
+              </table>
+</div>
+
+<div id="divCon">
+    <label for="bookingDate">Select Date:</label>
+    <input type="date" id="bookingDate" @bind="bookingDate" />
+</div>
+
+<div>
+    <label for="distance">Distance (km):</label>
+    <input type="number" id="distance" @bind="distance" step="0.01" />
+
+    <a class="gmButton" href="https://www.google.com/maps/dir/Your+Location" 
+     target="popup" 
+    onclick="window.open('https://www.google.com/maps/dir/Your+Location','popup','width=1000,height=680'); return false;">
+                 <img src="/images/tmap.png" alt="Button Image" width="50" height="50"  title="Open Google Maps"/>
+
+
+</a>
+</div>
+
+<div>
+    <button id ="calculatePrice" @onclick="CalculatePrice">Calculate Price</button>
+</div>
+
+@*Receipt*@
+
+@if (showReceipt)
+{
+    <div class="receipt">
+        <h4>Receipt</h4>
+        <p><strong>Taxi Type:</strong> @selectedTaxiType</p>
+        <p><strong>Date:</strong> @bookingDate.ToShortDateString()</p>
+        <p><strong>Distance (km):</strong> @distance</p>
+    </div>
+    
+}
+
+@if (calculatedPrice.HasValue)
+{
+    <div>
+        <h4 id="totalPrice">Total Price: @calculatedPrice.Value.ToString("C", CultureInfo.CurrentCulture)</h4>
+    </div>
+}
+
+@code {
+    private string selectedTaxiType = "Almindelige (Dagtimer)";
+    private DateTime bookingDate = DateTime.Today;
+    private TimeSpan bookingTime = DateTime.Now.TimeOfDay;
+    private double distance;
+    private decimal? calculatedPrice;
+    private bool showReceipt = false;
+
+
+    private void CalculatePrice()
+    {
+        var calculator = new TaxiPriceCalculator();
+        calculatedPrice = calculator.CalculatePrice(selectedTaxiType, bookingDate, distance);
+        showReceipt = true;
+
+    }
+
+     private string bookingTimeFormatted;
+
+
+    private void HandleTimeInput(ChangeEventArgs e)
+    {
+        bookingTimeFormatted = e.Value.ToString();
+    }
+
+}

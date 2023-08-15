@@ -1,0 +1,108 @@
+﻿body {
+}
+
+/* Add these CSS classes to your styling */
+.visible {
+    display: block;
+}
+
+.hidden {
+    display: none;
+}
+
+.information-box {
+    border: 1px solid #ccc;
+    padding: 10px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    background-color: lightgrey;
+    width: fit-content;
+    position: absolute;
+    top: 20%; /* Adjust the vertical alignment as needed */
+    right: 15%; /* Position to the far right */
+    transform: translateY(-50%); /* Center vertically */
+}
+#divCon {
+    padding-top: 5px;
+}
+
+.title {
+    color: green;
+    font-weight: bolder;
+    font-size: 3em;
+}
+
+#calculatePrice{
+    background-color: lawngreen;
+    color:black;
+    font-weight:bold;
+}
+
+th, td {
+    padding: 10px;
+    color: black;
+}
+
+th {
+    font-size: 1em;
+}
+
+#passagerer {
+    font-size: 1em;
+}
+#tid {
+    font-size: 1em;
+}
+
+/*Receipt*/
+.receipt {
+    border: 1px solid #ccc;
+    padding: 10px;
+    margin-top: 20px;
+    background-color: #f7f7f7;
+    width: fit-content;
+}
+
+.receipt > h4{
+    font-weight: bolder;
+    color:green;
+}
+
+#totalPrice{
+    text-decoration: underline;
+    color:blue;
+    font-weight:bold;
+}
+
+.gmButton {
+    display: inline-block;
+    text-decoration: none;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+    .gmButton:hover {
+        background-color: grey;
+    }
+    .gmButton:hover:after{
+        visibility: visible;
+    }
+
+    .gmButton:hover:before{
+        opacity:1;
+        visibility: hidden;
+    }
+
+label {
+    font-weight:bold;
+}
+
+input {
+    width: 120px;
+    padding: 5px;
+}
+
+select {
+    padding:5px;
+}
