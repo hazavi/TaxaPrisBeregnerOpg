@@ -1,48 +1,85 @@
 ﻿namespace Taxaopg.Services
 {
-    // Services/TaxiPriceCalculator.cs
     public class TaxiPriceCalculator
     {
-        public decimal CalculatePrice(string taxiType, DateTime date, double distance)
+        private const decimal Cykel = 30.0M;
+        private const decimal Opbæring = 30.0M;
+        private const decimal Liftvogn = 30.0M;
+        private const decimal FraLufthavn = 15.0M;
+        private const decimal Bro1 = 350.0M;
+        private const decimal Bro2 = 540.0M;
+
+
+        public decimal CalculatePrice(string taxiType, DateTime date, double distance, bool cykel, bool opbæring, bool liftvogn, bool fraLufhavn, bool bro1, bool bro2, int minutes)
         {
-            decimal basePrice;
-            decimal pricePerKm;
+            decimal startPris;
+            decimal prisPrKM;
+            decimal minutPris;
 
             if (taxiType == "Almindelige (Dagtimer)")
             {
-                basePrice = 37.0M;
-                pricePerKm = 12.75M;
-
+                startPris = 37.0M;
+                prisPrKM = 12.75M;
+                minutPris = 5.75M;
             }
             else if (taxiType == "Almindelige (Aften/Nat/Weekend)")
             {
-                basePrice = 47.0M;
-                pricePerKm = 16M;
-
+                startPris = 47.0M;
+                prisPrKM = 16M;
+                minutPris = 7.0M;
             }
-            else if(taxiType == "MiniBus (Dagtimer)")
+            else if (taxiType == "MiniBus (Dagtimer)")
             {
-                basePrice = 77.0M;
-                pricePerKm = 17M;
-
+                startPris = 77.0M;
+                prisPrKM = 17M;
+                minutPris = 5.75M;
             }
-            else if(taxiType == "MiniBus (Aften/Nat/Weekend)")
+            else if (taxiType == "MiniBus (Aften/Nat/Weekend)")
             {
-                basePrice = 87M;
-                pricePerKm = 19M;
-
+                startPris = 87M;
+                prisPrKM = 19M;
+                minutPris = 7.0M;
             }
             else
             {
                 throw new ArgumentException("Fejl", nameof(taxiType));
             }
 
-            decimal totalPrice = basePrice + (decimal)distance * pricePerKm;
+            decimal totalPris = startPris + (decimal)distance * prisPrKM;
 
-            return totalPrice;
+            if (cykel)
+            {
+                totalPris += Cykel; // Additional fee for bikes
+            }
+
+            if (opbæring)
+            {
+                totalPris += Opbæring; 
+            }
+
+            if (liftvogn)
+            {
+                totalPris += Liftvogn; 
+            }
+
+            if (fraLufhavn)
+            {
+                totalPris += FraLufthavn; // Additional fee for airport pickup
+            }
+
+            if (bro1)
+            {
+                totalPris += Bro1; // Additional fee for bridges
+            } 
+
+            if (bro2)
+            {
+                totalPris += Bro2; // Additional fee for bridges
+            }
+
+            totalPris += minutPris * minutes; // Add minute-based pricing
+
+            return totalPris;
         }
-
-
     }
-
 }

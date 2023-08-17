@@ -1,7 +1,60 @@
-﻿body {
+﻿
+
+.title {
+    display:flex;
+    justify-content:center;
 }
 
-/* Add these CSS classes to your styling */
+.extras {
+    background-color: lightgray;
+    border: 1px solid #ccc;
+    padding: 10px;
+    margin-top: 20px;
+    width: fit-content;
+    flex-direction: column;
+    justify-content: flex-start;
+    justify-items: flex-start;
+    align-items: start;
+    font-size: 1em;
+}
+.overBroen {
+    margin-top: 20px;
+}
+
+.extras > div {
+    padding-left: 0px;
+    margin-left:0px;
+}
+.extras > label {
+    padding-left: 0px;
+    margin-left: 0px;
+}
+
+.checkbox {
+    transform: scale(1.5);
+    padding-left: 0px;
+    margin-left: 0px;
+}
+
+.page-body {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: flex-start;
+    height: fit-content;
+    width: fit-content;
+    padding: 20px;
+    gap: 50px;
+    margin-left: 100px;
+}
+.calcBody {
+    background-color: yellowgreen;
+    height: fit-content;
+    width: fit-content;
+    padding: 20px;
+
+}
+
 .visible {
     display: block;
 }
@@ -17,11 +70,11 @@
     margin-bottom: 10px;
     background-color: lightgrey;
     width: fit-content;
-    position: absolute;
-    top: 20%; /* Adjust the vertical alignment as needed */
-    right: 15%; /* Position to the far right */
-    transform: translateY(-50%); /* Center vertically */
+    background-color: black;
+    border-radius: 10px;
+    color:white;
 }
+
 #divCon {
     padding-top: 5px;
 }
@@ -32,15 +85,26 @@
     font-size: 3em;
 }
 
-#calculatePrice{
+#calcbut {
+    padding-top:10px;
+
+}
+
+#calculatePrice {
     background-color: lawngreen;
-    color:black;
-    font-weight:bold;
+    color: black;
+    font-weight: bold;
+    padding:5px;
+    border-radius:5px;
+}
+
+#calculatePrice:hover {
+    background-color: darkseagreen;
 }
 
 th, td {
-    padding: 10px;
-    color: black;
+    padding: 20px;
+    color: white;
 }
 
 th {
@@ -54,7 +118,6 @@ th {
     font-size: 1em;
 }
 
-/*Receipt*/
 .receipt {
     border: 1px solid #ccc;
     padding: 10px;
@@ -72,6 +135,10 @@ th {
     text-decoration: underline;
     color:blue;
     font-weight:bold;
+}
+#totalp {
+    padding-top:20px;
+    display:flex;
 }
 
 .gmButton {
@@ -106,3 +173,12 @@ input {
 select {
     padding:5px;
 }
+
+.prisTitel {
+    font-weight: bolder;
+    font-size: 1.2em;
+    display:flex;
+    justify-content: center;
+    padding-bottom:10px;
+}
+

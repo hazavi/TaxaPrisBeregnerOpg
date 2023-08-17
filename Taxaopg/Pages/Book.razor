@@ -4,6 +4,75 @@
 
 <h3 class = "title">Taxa Booking</h3>
 
+
+    @*PAGE BODY*@
+<div class="page-body">
+
+@*Extra Fees / Tillæg Display*@
+
+<div class="extras"> <h5><strong>Tillæg</strong></h5>
+  <div class="tillæg">
+    <div>
+        <label>
+            <input type="checkbox" class="checkbox" @bind="cykel" value="Cykel"/>
+            Cykel (+30 kr.)
+        </label>
+        
+    </div>
+
+    <div>
+        
+        <label>
+            <input type="checkbox" class="checkbox" @bind="opbæring" id="carry" value="Opbæring">
+            Opbæring (+30 kr.)
+            </label>
+    </div>
+
+    <div>
+        
+        <label>
+           <input type="checkbox" class="checkbox" @bind="liftvogn"  value="Liftvogn">
+            Liftvogn (+350 kr.)
+        </label>  
+
+    </div>
+
+    <div>
+        <label>
+             <input type="checkbox" class="checkbox" @bind="fraLufthavn" value="Lufthavn" /> 
+             Lufthavn (+15 kr.)
+         </label>
+
+    </div>
+
+
+    <div class="overBroen"> <h5><strong>Tillæg for kørsel over broer</strong></h5>
+        
+        <div>
+            <label>
+                <input type="checkbox" class="checkbox" @bind="bro1"  value="Øresund">
+                Øresund (+350 kr.)
+            </label>
+        </div>
+        
+        <div>
+            <label> 
+                <input type="checkbox" class="checkbox" @bind="bro2"  value="Storebæltsbroen">
+                Storebæltsbroen (+540 kr.)</label><br>
+        </div>
+        
+
+     </div>
+    </div>
+
+ </div>
+
+ @*Calculator Body*@
+ <div class="calcBody">
+
+
+@*Taxitype selector*@
+
 <div>
     <label for="taxiType">Vælg taxa:</label>
     <select id="taxiType" @bind="selectedTaxiType">
@@ -14,14 +83,105 @@
     </select>
 </div>
 
-@*Display*@
+@*Date *@
+
+<div id="divCon">
+    <label for="bookingDate">Select Date:</label>
+    <input type="date" id="bookingDate" @bind="bookingDate" />
+</div>
+
+@*Distance and Google Map*@
+
+<div>
+    <label for="distance">Distance (km):</label>
+    <input type="number" id="distance" @bind="distance" step="0.01" />
+
+    <a class="gmButton" href="https://www.google.com/maps/dir/Your+Location" 
+     target="popup" 
+     onclick="window.open('https://www.google.com/maps/dir/Your+Location','popup','width=1000,height=680'); return false;">
+      <img src="/images/tmap.png" alt="Button Image" width="50" height="50"  title="Open Google Maps"/>
+    </a>
+</div>
+
+@*Antal Minutter*@
+<div>
+    <label>
+      Minutes: <input type="number" @bind="minutes" />
+    </label>
+</div>
+
+@*Beregner knap*@
+<div id="calcbut">
+    <button id ="calculatePrice" @onclick="CalculatePrice">Calculate Price</button>
+</div>
+
+@*Receipt*@
+
+@if (showReceipt)
+{
+    <div class="receipt">
+        <h4><strong>Receipt</strong></h4>
+        <p><strong>Taxi Type:</strong> @selectedTaxiType</p>
+        <p><strong>Date:</strong> @bookingDate.ToShortDateString()</p>
+        <p><strong>Distance (km):</strong> @distance</p>
+        <p><strong>Minutes:</strong> @minutes</p>
+
+        @if (cykel || fraLufthavn || bro1 || bro2 || opbæring || liftvogn)
+        {
+            <h5>+Tillæg</h5>
+
+            @if (cykel)
+            {
+                <p>Cykel (+30 kr.)</p>
+            }
+            @if (fraLufthavn)
+            {
+                <p>Lufthavn (+15 kr.)</p>
+            }
+            @if (bro1)
+            {
+                <p>Øresund (+350 kr.)</p>
+            }
+            @if (bro2)
+            {
+                <p>Storebæltsbroen (+540 kr.)</p>
+            }
+            @if (opbæring)
+            {
+                <p>Opbæring (+30 kr.)</p>
+            }
+            @if (liftvogn)
+            {
+                <p>Liftvogn (+350 kr.)</p>
+            }
+        }
+
+    </div>
+}
+
+@*Total Price*@
+
+@if (calculatedPrice.HasValue)
+{
+    <div id="totalp">
+        <h4 id="totalPrice">Total Price: @calculatedPrice.Value.ToString("C", CultureInfo.CurrentCulture)</h4>
+    </div>
+}
+
+ </div> @*Calculator Body End*@
+
+ @*Pris Tabel Display*@
 
 <div class="information-box @(selectedTaxiType == "Almindelige (Dagtimer)" ? "visible" : "hidden")">
-            <table>
+            
+    <div class ="prisTitel">Pris Tabel</div>
+
+    <table>
 
               <tr>
                  <th>Start</th>
                  <th>Kilometer</th>
+                 <th>MinutPris</th>
 
               </tr>
 
@@ -29,6 +189,8 @@
                    <td>37(kr./tur)</td>
 
                    <td>12,75(kr./km)</td>
+
+                   <td>5,75(kr./min)</td>
               </tr>
 
               <tr>
@@ -47,11 +209,15 @@
               </table>
 </div>
 <div class="information-box @(selectedTaxiType == "Almindelige (Aften/Nat/Weekend)" ? "visible" : "hidden")">
+
+    <div class ="prisTitel">Pris Tabel</div>
+
     <table>
 
               <tr>
                  <th>Start</th>
                  <th>Kilometer</th>
+                 <th>MinutPris</th>
 
               </tr>
 
@@ -59,6 +225,8 @@
                    <td>47(kr./tur)</td>
 
                    <td>16(kr./km)</td>
+
+                   <td>7(kr./min)</td>
               </tr>
 
               <tr>
@@ -80,11 +248,15 @@
 </div>
 
 <div class="information-box @(selectedTaxiType == "MiniBus (Dagtimer)" ? "visible" : "hidden")">
-   <table>
+ 
+    <div class ="prisTitel">Pris Tabel</div>
+
+    <table>
 
               <tr>
                  <th>Start</th>
                  <th>Kilometer</th>
+                 <th>MinutPris</th>
 
               </tr>
 
@@ -92,6 +264,8 @@
                    <td>77(kr./tur)</td>
 
                    <td>17(kr./km)</td>
+
+                   <td>5,75(kr./min.)</td>
               </tr>
 
               <tr>
@@ -110,11 +284,15 @@
               </table>
 </div>
 <div class="information-box @(selectedTaxiType == "MiniBus (Aften/Nat/Weekend)" ? "visible" : "hidden")">
+
+    <div class ="prisTitel">Pris Tabel</div>
+
      <table>
 
               <tr>
                  <th>Start</th>
                  <th>Kilometer</th>
+                 <th>MinutPris</th>
 
               </tr>
 
@@ -122,6 +300,7 @@
                    <td>87(kr./tur)</td>
 
                    <td>19(kr./km)</td>
+                   <td>7(kr./min.)</td>
               </tr>
 
               <tr>
@@ -142,47 +321,10 @@
               </table>
 </div>
 
-<div id="divCon">
-    <label for="bookingDate">Select Date:</label>
-    <input type="date" id="bookingDate" @bind="bookingDate" />
-</div>
 
-<div>
-    <label for="distance">Distance (km):</label>
-    <input type="number" id="distance" @bind="distance" step="0.01" />
-
-    <a class="gmButton" href="https://www.google.com/maps/dir/Your+Location" 
-     target="popup" 
-    onclick="window.open('https://www.google.com/maps/dir/Your+Location','popup','width=1000,height=680'); return false;">
-                 <img src="/images/tmap.png" alt="Button Image" width="50" height="50"  title="Open Google Maps"/>
+</div>  @*Page-body*@
 
 
-</a>
-</div>
-
-<div>
-    <button id ="calculatePrice" @onclick="CalculatePrice">Calculate Price</button>
-</div>
-
-@*Receipt*@
-
-@if (showReceipt)
-{
-    <div class="receipt">
-        <h4>Receipt</h4>
-        <p><strong>Taxi Type:</strong> @selectedTaxiType</p>
-        <p><strong>Date:</strong> @bookingDate.ToShortDateString()</p>
-        <p><strong>Distance (km):</strong> @distance</p>
-    </div>
-    
-}
-
-@if (calculatedPrice.HasValue)
-{
-    <div>
-        <h4 id="totalPrice">Total Price: @calculatedPrice.Value.ToString("C", CultureInfo.CurrentCulture)</h4>
-    </div>
-}
 
 @code {
     private string selectedTaxiType = "Almindelige (Dagtimer)";
@@ -191,15 +333,21 @@
     private double distance;
     private decimal? calculatedPrice;
     private bool showReceipt = false;
-
+    bool cykel;
+    bool opbæring;
+    bool liftvogn;
+    bool fraLufthavn;
+    bool bro1;
+    bool bro2;
+    int minutes;
 
     private void CalculatePrice()
     {
         var calculator = new TaxiPriceCalculator();
-        calculatedPrice = calculator.CalculatePrice(selectedTaxiType, bookingDate, distance);
+        calculatedPrice = calculator.CalculatePrice(selectedTaxiType, bookingDate, distance, cykel, opbæring, liftvogn, fraLufthavn, bro1, bro2, minutes);
         showReceipt = true;
-
     }
+
 
      private string bookingTimeFormatted;
 
